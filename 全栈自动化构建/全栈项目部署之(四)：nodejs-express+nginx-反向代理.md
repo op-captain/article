@@ -1,4 +1,4 @@
-# web项目部署之(四)：nodejs-express+nginx-反向代理
+# 全栈项目部署之(四)：nodejs-express+nginx-反向代理
 
 > Nginx+Nodejs+MySql+Vue+Github+Jenkins
 
@@ -42,7 +42,8 @@
     
     
 -  写入下面配置
-    
+
+创建项目存放目录 /data/www/mock/dist
 
 
          server {
@@ -54,7 +55,7 @@
             #access_log  logs/host.access.log  main;
             
             location / {
-                root   /data/www/mock; //静态资源
+                root   /data/www/mock/dist; //静态资源
                 index  index.html index.htm;
             }
         
@@ -93,4 +94,71 @@
 
 
     service nginx restart
+
+
+## jenkins自动化部署
+
+#### Jenkins和业务在不同的服务器
+
+**1. 安装ssh插件**
+
+首先，先在Jenkins上装一个插件Publish Over SSH，我们将通过这个工具实现服务器部署功能。
+
+
+**2. 生成服务器上的密钥**
+
+        cd ~
+        
+        ssh-keygen -t rsa
+        
+**3. 添加公钥**
+
+将生成的公钥添加到需要发布的业务服务器的特定用户的.ssh/authorized_keys文件中。
+        
+**3. 插件配置**
+
+系统管理-系统设置里找到Publish over SSH这一项。 重点参数说明：
+
+    注意：Path to key 和 Key 二选一填写就可以了
+
+    https://wiki.jenkins.io/display/JENKINS/Publish+Over+SSH+Plugin
+
+
+    Passphrase：密码（key的密码，没设置就是空）
+    Path to key：key文件（私钥）的路径
+    Key：将私钥复制到这个框中(path to key和key写一个即可)
+    
+    SSH Servers的配置：
+    SSH Server Name：标识的名字（随便你取什么）
+    Hostname：需要连接ssh的主机名或ip地址（建议ip）
+    Username：用户名
+    Remote Directory：远程目录（上面nginx对应的目录）
+    
+    高级配置：
+    Use password authentication, or use a different key：勾选这个可以使用密码登录，不想配ssh的可以用这个先试试
+    Passphrase / Password：密码登录模式的密码
+    Port：端口（默认22）
+    Timeout (ms)：超时时间（毫秒）默认300000
+    
+    来源：https://juejin.im/post/5ad1980e6fb9a028c42ea1be
+    
+#### Jenkins和业务在同一个服务器
+
+测试没成功，暂时用 手动脚本部署！
+
+创建sh脚本
+
+    https://jingyan.baidu.com/article/2fb0ba40ef0dee00f2ec5f12.html
+    
+存放地址
+
+    /root/web_sh
+    
+执行
+
+    sh /root/web_sh/mock_dist_send.sh
+
+
+
+
 
