@@ -1,4 +1,4 @@
-# 全栈项目部署之(四)：nodejs-express+nginx-反向代理
+# web项目部署之(四)：jenkins部署 + nginx反向代理
 
 > Nginx+Nodejs+MySql+Vue+Github+Jenkins
 
