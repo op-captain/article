@@ -1,4 +1,4 @@
-# 全栈项目部署之(二)：MySql+Jenkins
+# web项目部署之(二)：MySql+Jenkins
 
 > Nginx+Nodejs+MySql+Vue+Github+Jenkins
 

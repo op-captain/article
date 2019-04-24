@@ -1,4 +1,4 @@
-# 全栈项目部署之(三)：vue+github+jenkins
+# web项目部署之(三)：vue+github+jenkins
 
 > Nginx+Nodejs+MySql+Vue+Github+Jenkins
 
