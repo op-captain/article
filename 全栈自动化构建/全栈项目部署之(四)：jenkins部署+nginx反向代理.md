@@ -144,20 +144,52 @@
     
 #### Jenkins和业务在同一个服务器
 
-测试没成功，暂时用 手动脚本部署！
+将构建立好的项目复制到nginx静态资源目录中，但jenkins用户操作其它目录是需要权限的。所以要先给权限。让jenkins以root或对应用户执行
 
-创建sh脚本
+打开配置文件
 
-    https://jingyan.baidu.com/article/2fb0ba40ef0dee00f2ec5f12.html
+    vi /etc/sysconfig/jenkins 
     
-存放地址
+1. 修改Jenkins配置文件 改为root
 
-    /root/web_sh
+
+    #Unix user account that runs the Jenkins daemon 
+    #Be careful when you change this, as you need to update
+    #permissions of $JENKINS_HOME and /var/log/jenkins.
     
-执行
+    JENKINS_USER="root"
+    
+2. 修改Jenkins相关文件夹用户权限
 
-    sh /root/web_sh/mock_dist_send.sh
 
+    chown -R root:root /var/lib/jenkins/
+    chown -R root:root /var/cache/jenkins/
+    chown -R root:root /var/log/jenkins/
+    
+    
+3. 重启Jenkins（若是其他方式安装的jenkins则重启方式略不同
+
+
+    service jenkins restart
+
+
+4. 给jenkins用户添加相应文件的权限
+
+
+    chown -R jenkins <path>
+
+> 来源：https://www.jianshu.com/p/fa546f723724
+    
+
+    
+5. 构建脚本增加删除和复制到指定目录
+
+
+    npm install
+    rm -rf dist
+    npm run build
+    rm -rf /data/www/mock/
+    cp -a dist /data/www/mock/
 
 
 
